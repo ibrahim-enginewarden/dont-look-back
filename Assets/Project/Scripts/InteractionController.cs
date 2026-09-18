@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class InteractionController : MonoBehaviour
 {
     [SerializeField] private Camera playerCamera;
-    [SerializeField] private float interactionDistance = 3f;
+    [SerializeField] private float interactionDistance = 3.5f;
     private bool hasKey = false;
     private void Update()
     {
@@ -21,14 +21,15 @@ public class InteractionController : MonoBehaviour
             playerCamera.transform.forward
             );
 
-        if(Physics.Raycast(
+        if (Physics.SphereCast(
            ray,
+           0.15f,
            out RaycastHit hit,
            interactionDistance))
         {
             Door door = hit.collider.GetComponentInParent<Door>();
 
-            if(door != null)
+            if (door != null)
             {
                 door.Interact(hasKey);
                 return;
@@ -36,7 +37,7 @@ public class InteractionController : MonoBehaviour
 
             Note note = hit.collider.GetComponentInParent<Note>();
 
-            if(note != null)
+            if (note != null)
             {
                 note.Read();
                 return;
@@ -44,7 +45,7 @@ public class InteractionController : MonoBehaviour
 
             Key key = hit.collider.GetComponentInParent<Key>();
 
-            if(key != null)
+            if (key != null)
             {
                 key.Collect();
                 hasKey = true;

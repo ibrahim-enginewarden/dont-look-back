@@ -11,9 +11,13 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Transform cameraTransform;
 
+    [SerializeField] private float gravity = -9.81f;
+
     private CharacterController characterController;
     
     private float verticalRotation = 0f;
+
+    private float verticalVelocity = 0f;
 
     private void Awake()
     {
@@ -44,6 +48,14 @@ public class PlayerController : MonoBehaviour
         Vector3 movement =
             transform.right * input.x +
             transform.forward * input.y;
+
+        if(characterController.isGrounded && verticalVelocity < 0f)
+        {
+            verticalVelocity = -2f;
+        }
+
+        verticalVelocity += gravity * Time.deltaTime;
+        movement.y = verticalVelocity;
 
         characterController.Move(
             movement * moveSpeed * Time.deltaTime
